@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link
+      href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/media.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header__top-block"></div>
+
+        <div class="header__lang-switcher__wrapper">
+          <div class="header__lang-switcher" id="langSwitcherWrapper">
+            <div class="header__lang-switcher__preview" id="langSwitcher">
+              <div class="header__lang-switcher__preview__img">
+                <img src="img/flags/en.png" alt="" />
+              </div>
+              <div class="header__lang-switcher__preview__title">English</div>
+              <div class="header__lang-switcher__preview__arrow">
+                <img src="img/botArrow.png" alt="" />
+              </div>
+            </div>
+
+            <div class="header__lang-switcher__dropdown">
+              <div
+                class="header__lang-switcher__dropdown__content"
+                id="langSwitcherContent"
+              >
+                <a href="/en" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/en.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    English
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/es" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/es.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Español
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/fr" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/fr.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Français
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/de" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/de.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Deutsch
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/ru" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/ru.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Русский
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/pt" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/pt.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Português
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/cn" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/cn.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    简体中文
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/nl" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/nl.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Nederlands
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/pl" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/pl.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Polski
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/tr" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/tr.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Türkçe
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/id" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/id.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Indonesian
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/ja" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/ja.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    日本語
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/ko" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/ko.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    한국어
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+                <a href="/vt" class="header__lang-switcher__preview">
+                  <div class="header__lang-switcher__preview__img">
+                    <img src="img/flags/vt.png" alt="" />
+                  </div>
+                  <div class="header__lang-switcher__preview__title">
+                    Tiếng Việt
+                  </div>
+                  <div class="header__lang-switcher__preview__arrow"></div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <h1 class="main__title">Convert HEIC to JPG</h1>
+        <div class="main__subtitle">
+          Use this simple and free converter to quickly convert HEIC/HEIF files
+          to JPG format without losing quality.
+        </div>
+      </div>
+    </main>
+
+    <section class="dropzoneSection" id="dropzoneSection">
+      <div class="container">
+        <div class="dropzone__content dropzone dropzone-previews" id="dropzone">
+          <div class="dropzone__preview dropzone" id="dropzonePreviewEl"></div>
+
+          <div
+            class="dropzone__content__text-block__wrapper"
+            id="dropzoneContentTextWrapper"
+          >
+            <div class="dropzone__content__text-block">
+              <label for="inputFile" class="dropzone__content__button"
+                >upload .heic</label
+              >
+
+              <div class="dropzone__content__text-block__links-row">
+                <div class="dropzone__content__text-block__links-row__el">
+                  <div
+                    class="dropzone__content__text-block__links-row__el__icon"
+                  >
+                    <svg
+                      id="Layer_1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 42.4 39.5"
+                      width="2500"
+                      height="2329"
+                    >
+                      <path
+                        class="st0"
+                        d="M10.6 1.7L0 8.5l10.6 6.7 10.6-6.7zm21.2 0L21.2 8.5l10.6 6.7 10.6-6.7zM0 22l10.6 6.8L21.2 22l-10.6-6.8zm31.8-6.8L21.2 22l10.6 6.8L42.4 22zM10.6 31l10.6 6.8L31.8 31l-10.6-6.7z"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="dropzone__content__text-block__links-row__el__title"
+                    id="dropboxDownload"
+                  >
+                    Dropbox
+                  </div>
+                </div>
+              </div>
+
+              <div class="dropzone__content__text-block__OR">or</div>
+
+              <div class="dropzone__content__text-block__HERE">
+                Drop files here
+              </div>
+
+              <input id="inputFile" type="file" />
+            </div>
+          </div>
+        </div>
+
+        <div class="dropzone__convert-content" id="convertButtons">
+          <div
+            class="dropzone__convert-content__convert dropzone__content__button"
+            id="convertAll"
+          >
+            Convert
+          </div>
+          <div class="dropzone__convert-content__cancel" id="convertCancel">
+            Cancel
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="share" id="share">
+      <div class="container">
+        <div class="share__title">Like it? Share it!</div>
+        <div class="share__buttons__row">
+          <a href="https://www.facebook.com/sharer/sharer.php?u=test.test" class="share__buttons__row__el facebook">Facebook</a>
+          <a href="http://www.twitter.com/share?url=https://test.test/&text=Convert HEIC to JPG&hashtags=heic%2Cjpg" class="share__buttons__row__el twitter">Twitter</a>
+          <a href="https://api.whatsapp.com/send?text= test.test - convert HEIC to JPG" class="share__buttons__row__el whatsapp">WhatsApp</a>
+          <a href="http://www.reddit.com/submit?url=https://test.ru/&title=Convert HEIC to JPG" class="share__buttons__row__el reddit">Reddit</a>
+          <a href="http://pinterest.com/pin/create/button/?url=https://test.test&description=Use this simple and free converter to quickly convert HEIC/HEIF files to JPG format without losing quality." class="share__buttons__row__el pinterest">Pinterest</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="howto" id="howto">
+      <div class="container">
+        <div class="howto__row">
+          <div class="howto__row__left">
+            <div class="howto__row__left__title">
+              How to convert HEIC to JPG online
+            </div>
+
+            <div class="howto__row__left__road">
+              <div class="howto__row__left__road__el">
+                <div class="howto__row__left__road__el__number">1</div>
+                <div class="howto__row__left__road__el__text">
+                  To get started, upload one or more of your HEIC files to the
+                  converter area.
+                </div>
+              </div>
+              <div class="howto__row__left__road__el">
+                <div class="howto__row__left__road__el__number">2</div>
+                <div class="howto__row__left__road__el__text">
+                  Next, click the "Convert" button and wait for the conversion
+                  to complete.
+                </div>
+              </div>
+              <div class="howto__row__left__road__el">
+                <div class="howto__row__left__road__el__number">3</div>
+                <div class="howto__row__left__road__el__text">
+                  After the conversion is complete, you can download your JPG
+                  files in a single archive.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="howto__row__right">
+            <div class="howto__row__right__img-wrapper">
+              <img src="img/heic-to-jpg.png" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rate" id="rate">
+      <div class="container">
+        <div class="rate__content">
+          <div class="rate__title">Rate HEIC to JPG Converter</div>
+          <div class="rate__stars">
+            <div class="rate__star__el">
+              <div class="rate__star__el__star"></div>
+              <div class="rate__star__el__text">AWFUL</div>
+            </div>
+
+            <div class="rate__star__el">
+              <div class="rate__star__el__star"></div>
+              <div class="rate__star__el__text">POOR</div>
+            </div>
+
+            <div class="rate__star__el">
+              <div class="rate__star__el__star"></div>
+              <div class="rate__star__el__text">AVERAGE</div>
+            </div>
+
+            <div class="rate__star__el">
+              <div class="rate__star__el__star"></div>
+              <div class="rate__star__el__text">GOOD</div>
+            </div>
+
+            <div class="rate__star__el">
+              <div class="rate__star__el__star"></div>
+              <div class="rate__star__el__text">EXCELLENT</div>
+            </div>
+          </div>
+
+          <div class="rate__num"><span id="avgRate">?</span> / 5</div>
+          <div class="rate__votes">
+            <span id="rateCount">0</span> votes
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="container">
+        <div class="about__element">
+          <div class="about__element__title">
+            <div class="about__element__title__icon">
+              <img src="img/heic.png" alt="" />
+            </div>
+            <div class="about__element__title__text">
+              HEIC (High Efficiency Image File Format)
+            </div>
+          </div>
+
+          <div class="about__element__content">
+            The HEIC format is a new image file format that Apple announced with
+            the release of the iOS 11 platform in 2017. Today HEIC is one of the
+            standard image formats on the iOS operating system and is gradually
+            replacing the well-known JPG. Compared to other image formats, it
+            has a smaller file size and higher image quality. The new algorithm
+            supports working with transparency, as well as creating one file
+            from different images - HEIC is not just a format, but also a
+            container, which made it possible to store several photos and even
+            videos inside one file.
+          </div>
+
+          <div class="about__element__bottom__info-row">
+            <div class="about__element__bottom__info-row__el">
+              <div class="about__element__bottom__info-row__el__title">
+                File type:
+              </div>
+              <div class="about__element__bottom__info-row__el__value">
+                Image
+              </div>
+            </div>
+
+            <div class="about__element__bottom__info-row__el">
+              <div class="about__element__bottom__info-row__el__title">
+                File extension:
+              </div>
+              <div class="about__element__bottom__info-row__el__value">
+                .heic, .heif
+              </div>
+            </div>
+
+            <div class="about__element__bottom__info-row__el">
+              <div class="about__element__bottom__info-row__el__title">
+                Developed by:
+              </div>
+              <div class="about__element__bottom__info-row__el__value">
+                Moving Picture Experts Group
+              </div>
+            </div>
+
+            <div class="about__element__bottom__info-row__el">
+              <div class="about__element__bottom__info-row__el__title">
+                Initial release:
+              </div>
+              <div class="about__element__bottom__info-row__el__value">
+                2015
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about__element">
+          <div class="about__element__title">
+            <div class="about__element__title__icon">
+              <img src="img/jpg.png" alt="" />
+            </div>
+            <div class="about__element__title__text">
+              JPG (Joint Photographic Experts Group)
+            </div>
+          </div>
+
+          <div class="about__element__content">
+            The JPG format is perhaps the most popular among the photo image
+            formats. There are many applications that support viewing and
+            editing JPG files and work on almost all modern operating systems.
+            In addition, this format is supported by the vast majority of
+            imaging devices. JPEG files use a lossy compression method that can
+            significantly reduce file size without significantly compromising
+            quality. Files with the .jpg extension support over 16 million
+            colors (TrueColor system) in RGB, which is capable of providing
+            24-bit / pixel color depth.
+          </div>
+
+          <div class="about__element__bottom__info-row">
+            <div class="about__element__bottom__info-row__el">
+              <div class="about__element__bottom__info-row__el__title">
+                File type:
+              </div>
+              <div class="about__element__bottom__info-row__el__value">
+                Image
+              </div>
+            </div>
+
+            <div class="about__element__bottom__info-row__el">
+              <div class="about__element__bottom__info-row__el__title">
+                File extension:
+              </div>
+              <div class="about__element__bottom__info-row__el__value">
+                .jpg, .jpeg
+              </div>
+            </div>
+
+            <div class="about__element__bottom__info-row__el">
+              <div class="about__element__bottom__info-row__el__title">
+                Developed by:
+              </div>
+              <div class="about__element__bottom__info-row__el__value">
+                Joint Photographic Experts Group
+              </div>
+            </div>
+
+            <div class="about__element__bottom__info-row__el">
+              <div class="about__element__bottom__info-row__el__title">
+                Initial release:
+              </div>
+              <div class="about__element__bottom__info-row__el__value">
+                September 18, 1992
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" id="footer">
+      <div class="container">
+        <div class="footer__left">Convert HEIC to JPG Online © 2024</div>
+        <div class="footer__right">
+          <div class="footer__right__row">
+            <a href="#" class="footer__right__row__el">Contact</a>
+            <a href="#" class="footer__right__row__el">Privacy policy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <div class="modal">
+      <div class="modal__wrapper">
+        <div class="modal__content">
+          <div class="modal__close-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              width="100"
+              height="100"
+              viewBox="0 0 50 50"
+            >
+              <path
+                d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"
+              ></path>
+            </svg>
+          </div>
+
+          <div class="modal__computer-button" id="modalComputerBtn">Computer</div>
+          <div class="modal__dropbox-button" id="modalDropboxBtn">
+            <div class="dropzone__content__text-block__links-row__el">
+              <div
+                class="dropzone__content__text-block__links-row__el__icon"
+              >
+                <svg
+                  id="Layer_1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 42.4 39.5"
+                  width="2500"
+                  height="2329"
+                >
+                  <path
+                    class="st0"
+                    d="M10.6 1.7L0 8.5l10.6 6.7 10.6-6.7zm21.2 0L21.2 8.5l10.6 6.7 10.6-6.7zM0 22l10.6 6.8L21.2 22l-10.6-6.8zm31.8-6.8L21.2 22l10.6 6.8L42.4 22zM10.6 31l10.6 6.8L31.8 31l-10.6-6.7z"
+                  />
+                </svg>
+              </div>
+              <div
+                class="dropzone__content__text-block__links-row__el__title"
+              >
+                Dropbox
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      type="text/javascript"
+      src="https://www.dropbox.com/static/api/2/dropins.js"
+      id="dropboxjs"
+      data-app-key="1pabozlz77ytbrz"
+    ></script>
+    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

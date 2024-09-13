@@ -1,0 +1,62 @@
+@media screen and (max-width: 1280px) {
+  .container {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+} 
+
+@media screen and (max-width: 900px) {
+  .share__buttons__row {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 260px;
+  }
+  .share__buttons__row__el  {
+    margin-bottom: 20px;
+  }
+  .share__buttons__row__el:nth-child(odd) {
+    margin-right: 10px;
+  }
+  .howto__row__right {
+    display: none;
+  }
+  .howto__row {
+    justify-content: center;
+  }
+  .howto__row__left {
+    width: 100%;
+  }
+  .howto__row__left__road__el {
+    width: 95%;
+    justify-content: flex-start;
+  }
+  .howto__row__left__road__el__number {
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 765px) {
+  .header__lang-switcher__wrapper {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .main__subtitle {
+    font-size: 14px;
+  }
+  .main__title {
+    font-size: 28px;
+  }
+  .about__element__bottom__info-row {
+    flex-direction: column;
+  }
+
+  .footer .container {
+    flex-direction: column;
+  }
+
+  .footer__left {
+    margin-bottom: 15px;
+  }
+}
