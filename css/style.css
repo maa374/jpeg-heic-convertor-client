@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 html {
 	box-sizing: border-box;
 	font-family: 'Montserrat', sans-serif;
@@ -21,7 +23,9 @@ body {
 	justify-content: flex-end;
 }
 
-
+.dropzone__preview__converted-file-data {
+	display: none;
+}
 .header__lang-switcher__preview {
 	background-color: #fff;
 	box-shadow: 0 0 15px rgba(0,0,0,.1);
@@ -677,6 +681,11 @@ main {
 	background-color: #f27646;
 	display: block;
 	margin-bottom: 15px;
+	transition: 0.3s ease;
+}
+.dropzone__convert-content__convert:hover {
+	
+	background-color: #f36831;
 }
 .dropzone__convert-content__cancel {
 	font-size: 11px;
@@ -831,4 +840,43 @@ main {
 }
 .modal__computer-button:hover {
   background-color: #68727a;
+}
+
+.dropzone__preview__el__right {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	width: 240px;
+}
+
+.dropzone__preview__el__right.active {
+	justify-content: space-between;
+}
+
+.dropzone__preview__el__right.active .dropzone__preview__converted-file-data {
+	display: flex;
+}
+.dropzone__preview__converted-file-data {
+	display: none;
+	justify-content: space-between;
+	align-items: center;
+	width: 80px;
+}
+.dropzone__preview__converted-file-data__format {
+	color: #d15d30;
+	font-weight: 600;
+	font-size: 12px;
+}
+
+.dropzone__preview__converted-file-data__size {
+	color: #989386;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.dropzone__preview__converted-file-data__size span {
+	font-weight: 600;
+}
+.dropzone__preview__el__download {
+}
+.dropbox {
 }

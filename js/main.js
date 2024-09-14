@@ -181,7 +181,14 @@ dropzone.options = {
         </div>
       </div>
 
-      <a class="dropzone__preview__el__download">Convert to JPG</a>
+      <div class="dropzone__preview__el__right">
+        <div class="dropzone__preview__converted-file-data">
+          <div class="dropzone__preview__converted-file-data__format">.JPG</div>
+          <div class="dropzone__preview__converted-file-data__size"><span class="dropzonePreviewSize"></span> kb</div>
+        </div>
+              
+        <a class="dropzone__preview__el__download">Convert to JPG</a>
+      </div>
       <div class="dropzone__preview__el__close">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -285,9 +292,7 @@ function setCloseButtonsListeners() {
 
   for (let i = 0; i < closeButtons.length; i++) {
     if (!closeButtons[i].classList.contains("dropboxClose")) {
-      closeButtons[i].addEventListener("click", async () => {
-        removeFile(dt.files[i]);
-
+      closeButtons[i].addEventListener("click", async (e) => {
         if (dropzone.files.length === 0)
           document.getElementById("convertCancel").click();
 
@@ -311,6 +316,7 @@ function setCloseButtonsListeners() {
             });
           }
         }
+        removeFile(dt.files[i]);
       });
     }
   }
@@ -319,7 +325,7 @@ function setCloseButtonsListeners() {
 let downloadButtons = [];
 function setDownloadButtonsListeners(buttons) {
   buttons.forEach((button, index) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (e) => {
       let isInDownloadButtons = false;
 
       for (let i = 0; i < downloadButtons.length; i++) {
@@ -383,6 +389,13 @@ async function convertFile(file, DOMButton) {
               return res.blob();
             })
             .then((blob) => {
+              const parentNode = DOMButton.parentNode;
+              convertAll.innerHTML = "download";
+
+              parentNode.classList.add("active");
+              parentNode.querySelectorAll(".dropzonePreviewSize")[0].innerHTML =
+                (blob.size / 1024).toFixed(1);
+
               const url = window.URL.createObjectURL(blob);
               DOMButton.href = url;
               DOMButton.download = `${file.name.split(".")[0]}.jpg`;
@@ -443,6 +456,10 @@ convertAll.onclick = () => {
       downloadButtons[index].innerHTML.toLowerCase() !== "error"
     )
       downloadButtons[index].click();
+  });
+
+  downloadButtons.forEach((btn) => {
+    if (btn.innerHTML.toLowerCase() === "download") btn.click();
   });
 };
 
@@ -516,7 +533,15 @@ options = {
         </div>
       </div>
 
-      <a class="dropzone__preview__el__download dropbox" id="${id}">Loading</a>
+      <div class="dropzone__preview__el__right">
+        <div class="dropzone__preview__converted-file-data">
+          <div class="dropzone__preview__converted-file-data__format">.JPG</div>
+          <div class="dropzone__preview__converted-file-data__size"><span class="dropzonePreviewSize"></span> kb</div>
+        </div>
+              
+        <a class="dropzone__preview__el__download dropbox" id="${id}">Loading</a>
+      </div>
+                
       <div class="dropzone__preview__el__close dropboxClose" id="close_${id}">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -614,6 +639,14 @@ async function uploadDropboxLink(file, id) {
             return res.blob();
           })
           .then((blob) => {
+            const parentNode = document.getElementById(id).parentNode;
+            convertAll.innerHTML = "download";
+
+            parentNode.classList.add("active");
+            parentNode.querySelectorAll(".dropzonePreviewSize")[0].innerHTML = (
+              blob.size / 1024
+            ).toFixed(1);
+
             const url = window.URL.createObjectURL(blob);
             btn.href = url;
             btn.download = `${file.name.split(".")[0]}.jpg`;
