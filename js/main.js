@@ -38,9 +38,11 @@ async function getRating() {
 
   if (res.avgRating === null) document.getElementById("avgRate").innerHTML = 5;
   else {
-    if (res.avgRating % 1 !== 0)
-      document.getElementById("avgRate").innerHTML = res.avgRating.toFixed(1);
-    else {
+    if (res.avgRating % 1 !== 0) {
+      document.getElementById("avgRate").innerHTML = parseFloat(
+        res.avgRating
+      ).toFixed(1);
+    } else {
       document.getElementById("avgRate").innerHTML = Math.floor(res.avgRating);
     }
   }
@@ -81,7 +83,6 @@ stars.forEach((star, index) => {
 
     if (!rateStatus) {
       postRate(rate);
-      getRating();
     }
   });
 
@@ -112,6 +113,8 @@ async function postRate(rate) {
   };
 
   await fetch("https://monkfish-app-rsu9p.ondigitalocean.app/uploadrate", obj);
+
+  getRating();
 }
 
 let rateStatus;
