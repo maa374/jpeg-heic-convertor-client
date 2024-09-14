@@ -117,7 +117,7 @@ async function postRate(rate) {
   getRating();
 }
 
-let rateStatus;
+let rateStatus = true;
 let serverRate;
 async function isRatePosted() {
   const IP = await fetch("https://ipapi.co/json")
@@ -262,12 +262,16 @@ dropzone.on("drop", (e) => {
 });
 
 inputFile.addEventListener("change", (e) => {
-  const file = e.target.files[0];
+  const files = e.target.files;
 
-  dropzone.emit("addedfile", file);
-  dropzone.emit("complete", file);
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
 
-  dropzone.files.push(file);
+    dropzone.emit("addedfile", file);
+    dropzone.emit("complete", file);
+
+    dropzone.files.push(file);
+  }
 
   document.getElementById("dropzone").classList.add("active");
 
