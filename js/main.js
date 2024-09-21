@@ -4,7 +4,7 @@ const language = window.location.toString().split("/")[3].split("?")[1];
 
 var localization = translates[language];
 
-if (!localization) localization = "en";
+if (!localization) localization = translates["en"];
 
 // translating
 
