@@ -1,3 +1,11 @@
+// translating
+
+const language = window.location.toString().split("/")[3].split(".")[0];
+
+const localization = translates[language];
+
+// translating
+
 // language switcher
 
 const langSwticher = document.getElementById("langSwitcher");
@@ -32,6 +40,7 @@ langSwitcherContent.addEventListener("mouseleave", (e) => {
 async function getRating() {
   const res = await fetch(
     "https://monkfish-app-rsu9p.ondigitalocean.app/rating"
+    // "http://localhost:8080/rating"
   ).then((res) => res.json());
 
   document.getElementById("rateCount").innerHTML = res.count;
@@ -47,7 +56,6 @@ async function getRating() {
     }
   }
 }
-getRating();
 
 const stars = document.querySelectorAll(".rate__star__el");
 const rateDescriptions = document.querySelectorAll(".rate__star__el__text");
@@ -125,10 +133,12 @@ async function isRatePosted() {
     .then((data) => data.ip);
 
   return await fetch(
+    // "http://localhost:8080/isPostRate/" + IP
     "https://monkfish-app-rsu9p.ondigitalocean.app/isPostRate/" + IP
   )
     .then((res) => res.json())
     .then((data) => {
+      getRating();
       rateStatus = data.status;
 
       if (rateStatus) {
@@ -187,7 +197,7 @@ dropzone.options = {
           <div class="dropzone__preview__converted-file-data__size"><span class="dropzonePreviewSize"></span> kb</div>
         </div>
               
-        <a class="dropzone__preview__el__download">Convert to JPG</a>
+        <a class="dropzone__preview__el__download">${localization.convertToJPEG}</a>
       </div>
       <div class="dropzone__preview__el__close">
         <svg
@@ -204,7 +214,7 @@ dropzone.options = {
         </svg>
       </div>
       </div>
-      <div class="dropzone__preview__add-button">Add more files</div>
+      <div class="dropzone__preview__add-button">${localization.addMoreFiles}</div>
     </div>
     `,
   previewsContainer: "#dropzonePreviewEl",
@@ -230,6 +240,10 @@ dropzone.on("addedfile", (file) => {
     ".dropzone__preview__add-button"
   );
 
+  if (dropzone.files.length > 0) {
+    convertAll.innerHTML = localization.convertAll;
+  }
+
   for (let i = 0; i < addNewFileButtons.length; i++) {
     if (i != addNewFileButtons.length - 1)
       addNewFileButtons[i].classList.remove("active");
@@ -243,13 +257,21 @@ dropzone.on("addedfile", (file) => {
           inputFile.click();
         document.getElementById("modalDropboxBtn").onclick = () =>
           dropboxButton.click();
+        document.getElementById("modalLinkBtn").onclick = () => {
+          linkButton.click();
+        };
       });
     }
   }
 
   document.getElementById("dropzoneSection").classList.add("active");
 
-  document.getElementById("dropzoneContentTextWrapper").style.display = "none";
+  document.getElementById("dropzoneContentTextWrapper").classList.add("active");
+
+  setTimeout(() => {
+    document.getElementById("convertButtons").classList.add("put");
+  }, 10);
+
   convertButtons.style.display = "flex";
   document.getElementById("dropzone").classList.add("active");
 
@@ -263,9 +285,13 @@ dropzone.on("drop", (e) => {
 
   for (let i = 0; i < files.length; i++) {
     dt.items.add(files[i]);
-  }
 
-  inputFile.files = dt.files;
+    // dropzone.emit("addedfile", files[i]);
+    // dropzone.emit("complete", files[i]);
+
+    dropzone.files.push(files[i]);
+  }
+  setCloseButtonsListeners();
 });
 
 inputFile.addEventListener("change", (e) => {
@@ -273,6 +299,7 @@ inputFile.addEventListener("change", (e) => {
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
+    dt.items.add(file);
 
     dropzone.emit("addedfile", file);
     dropzone.emit("complete", file);
@@ -280,6 +307,7 @@ inputFile.addEventListener("change", (e) => {
     dropzone.files.push(file);
   }
 
+  setCloseButtonsListeners();
   document.getElementById("dropzone").classList.add("active");
 
   modals.forEach((modal, index) => closeModal(index, modal.innerHTML));
@@ -290,6 +318,7 @@ function setCloseButtonsListeners() {
     ".dropzone__preview__el__close"
   );
 
+  let dropboxStatus = false;
   for (let i = 0; i < closeButtons.length; i++) {
     if (!closeButtons[i].classList.contains("dropboxClose")) {
       closeButtons[i].addEventListener("click", async (e) => {
@@ -299,6 +328,12 @@ function setCloseButtonsListeners() {
         const addNewFileButtons = document.querySelectorAll(
           ".dropzone__preview__add-button"
         );
+
+        removeFile(dt.files[i]);
+
+        if (dropboxStatus) {
+          closeButtons[i].offsetParent.remove();
+        }
 
         for (let i = 0; i < addNewFileButtons.length; i++) {
           if (i != addNewFileButtons.length - 1)
@@ -313,12 +348,13 @@ function setCloseButtonsListeners() {
                 inputFile.click();
               document.getElementById("modalDropboxBtn").onclick = () =>
                 dropboxButton.click();
+              document.getElementById("modalLinkBtn").onclick = () =>
+                linkButton.click();
             });
           }
         }
-        removeFile(dt.files[i]);
       });
-    }
+    } else dropboxStatus = true;
   }
 }
 
@@ -333,7 +369,8 @@ function setDownloadButtonsListeners(buttons) {
       }
 
       if (!isInDownloadButtons) {
-        button.innerHTML = "Loading...";
+        button.innerHTML = localization.loading;
+        button.classList.add("loading");
         if (convertFile(dropzone.files[index], button)) {
           downloadButtons.push(button);
         }
@@ -359,13 +396,14 @@ async function convertFile(file, DOMButton) {
       body: formData,
     };
     let res = await fetch(
+      // "http://localhost:8080/upload",
       "https://monkfish-app-rsu9p.ondigitalocean.app/upload",
       obj
     );
 
     if (res.status === 404) {
-      alert("error");
-      DOMButton.innerHTML = "error";
+      DOMButton.innerHTML = localization.error;
+      DOMButton.classList.remove("loading");
 
       return false;
     } else {
@@ -378,19 +416,21 @@ async function convertFile(file, DOMButton) {
       if (await serverName) {
         setTimeout(async () => {
           await fetch(
+            // "http://localhost:8080/get/" + serverName
             "https://monkfish-app-rsu9p.ondigitalocean.app/get/" + serverName
           )
             .then((res) => {
               if (res.status === 404) {
-                alert("error");
-                DOMButton.innerHTML = "error";
+                DOMButton.innerHTML = localization.error;
+                DOMButton.classList.remove("loading");
+                DOMButton.parentNode.classList.add("none");
+
                 return false;
               }
               return res.blob();
             })
             .then((blob) => {
               const parentNode = DOMButton.parentNode;
-              convertAll.innerHTML = "download";
 
               parentNode.classList.add("active");
               parentNode.querySelectorAll(".dropzonePreviewSize")[0].innerHTML =
@@ -399,7 +439,9 @@ async function convertFile(file, DOMButton) {
               const url = window.URL.createObjectURL(blob);
               DOMButton.href = url;
               DOMButton.download = `${file.name.split(".")[0]}.jpg`;
-              DOMButton.innerHTML = "download";
+              DOMButton.innerHTML = localization.download;
+              DOMButton.classList.remove("loading");
+              addDownloadButtonsListener();
 
               return true;
             });
@@ -431,14 +473,22 @@ document.getElementById("convertCancel").onclick = () => {
   dropzone.removeAllFiles();
 
   dt = new DataTransfer();
+  dropzone.files = [];
 
   fileToCloseHasBeen = [];
   fileToDownloadHasBeen = [];
 
   document.getElementById("dropzonePreviewEl").innerHTML = "";
 
-  document.getElementById("dropzoneContentTextWrapper").style.display = "flex ";
-  convertButtons.style.display = "none";
+  document.getElementById("convertButtons").classList.remove("put");
+
+  setTimeout(() => {
+    document
+      .getElementById("dropzoneContentTextWrapper")
+      .classList.remove("active");
+
+    document.getElementById("convertButtons").style.display = "none";
+  }, 190);
 
   document.getElementById("dropzone").classList.remove("active");
   document.getElementById("dropzoneSection").classList.remove("active");
@@ -452,14 +502,15 @@ convertAll.onclick = () => {
 
   dropzone.files.forEach((file, index) => {
     if (
-      downloadButtons[index].innerHTML.toLowerCase() !== "download" &&
-      downloadButtons[index].innerHTML.toLowerCase() !== "error"
+      downloadButtons[index].innerHTML.toLowerCase() !==
+        localization.download &&
+      downloadButtons[index].innerHTML.toLowerCase() !== localization.error
     )
       downloadButtons[index].click();
   });
 
   downloadButtons.forEach((btn) => {
-    if (btn.innerHTML.toLowerCase() === "download") btn.click();
+    if (btn.innerHTML.toLowerCase() === localization.download) btn.click();
   });
 };
 
@@ -475,6 +526,9 @@ function openModal(index) {
 
   document.body.style.overflow = "hidden";
   modals[index].classList.add("active");
+  setTimeout(() => {
+    modals[index].classList.add("visible");
+  }, 10);
 
   modals[index].children[0].onclick = (e) => {
     e.preventDefault();
@@ -488,9 +542,13 @@ function openModal(index) {
 }
 function closeModal(index, initModal) {
   document.body.style.overflow = "auto";
-  modals[index].innerHTML = initModal;
 
-  modals[index].classList.remove("active");
+  if (initModal) modals[index].innerHTML = initModal;
+
+  modals[index].classList.remove("visible");
+  setTimeout(() => {
+    modals[index].classList.remove("active");
+  }, 320);
 
   modals = document.querySelectorAll(".modal");
   modalClose = document.querySelectorAll(".modal__close-button");
@@ -501,12 +559,18 @@ function closeModal(index, initModal) {
 // dropbox
 
 options = {
-  extensions: [".heic"],
+  extensions: [".heic", ".heif"],
   success: async function (file) {
     document.getElementById("dropzoneSection").classList.add("active");
 
-    document.getElementById("dropzoneContentTextWrapper").style.display =
-      "none";
+    document
+      .getElementById("dropzoneContentTextWrapper")
+      .classList.add("active");
+
+    setTimeout(() => {
+      document.getElementById("convertButtons").classList.add("put");
+    }, 10);
+
     convertButtons.style.display = "flex";
     document.getElementById("dropzone").classList.add("active");
 
@@ -529,7 +593,7 @@ options = {
           
         >${fileData.name}</div>
         <div class="dropzone__preview__el__size">
-          <span>${fileData.size} b</span>
+          <span>${(fileData.size / 1024).toFixed(1)} kb</span>
         </div>
       </div>
 
@@ -539,7 +603,9 @@ options = {
           <div class="dropzone__preview__converted-file-data__size"><span class="dropzonePreviewSize"></span> kb</div>
         </div>
               
-        <a class="dropzone__preview__el__download dropbox" id="${id}">Loading</a>
+        <a class="dropzone__preview__el__download dropbox" id="${id}">${
+      localization.loading
+    }</a>
       </div>
                 
       <div class="dropzone__preview__el__close dropboxClose" id="close_${id}">
@@ -557,7 +623,9 @@ options = {
         </svg>
       </div>
       </div>
-      <div class="dropzone__preview__add-button">Add more files</div>
+      <div class="dropzone__preview__add-button">${
+        localization.addMoreFiles
+      }</div>
     </div>
     `;
     document.getElementById("dropzonePreviewEl").innerHTML += previewTemplate;
@@ -581,6 +649,8 @@ options = {
             inputFile.click();
           document.getElementById("modalDropboxBtn").onclick = () =>
             dropboxButton.click();
+          document.getElementById("modalLinkBtn").onclick = () =>
+            linkButton.click();
         });
       }
     }
@@ -609,13 +679,13 @@ async function uploadDropboxLink(file, id) {
   };
 
   let res = await fetch(
+    // "http://localhost:8080/linkupload",
     "https://monkfish-app-rsu9p.ondigitalocean.app/linkupload",
     obj
   );
 
   if (res.status === 404) {
-    alert("error");
-    btn.innerHTML = "error";
+    btn.innerHTML = localization.error;
 
     return false;
   } else {
@@ -629,18 +699,20 @@ async function uploadDropboxLink(file, id) {
       setTimeout(async () => {
         await fetch(
           "https://monkfish-app-rsu9p.ondigitalocean.app/get/" + serverName
+          // "http://localhost:8080/get/" + serverName
         )
           .then((res) => {
             if (res.status === 404) {
-              alert("error");
-              btn.innerHTML = "error";
+              btn.innerHTML = localization.error;
+              btn.classList.remove("loading");
+              document.getElementById(id).parentNode.classList.add("none");
+
               return false;
             }
             return res.blob();
           })
           .then((blob) => {
             const parentNode = document.getElementById(id).parentNode;
-            convertAll.innerHTML = "download";
 
             parentNode.classList.add("active");
             parentNode.querySelectorAll(".dropzonePreviewSize")[0].innerHTML = (
@@ -650,13 +722,27 @@ async function uploadDropboxLink(file, id) {
             const url = window.URL.createObjectURL(blob);
             btn.href = url;
             btn.download = `${file.name.split(".")[0]}.jpg`;
-            btn.innerHTML = "download";
+            btn.innerHTML = localization.download;
+            addDownloadButtonsListener();
 
             return true;
           });
       }, 2000);
     }
   }
+}
+
+function addDownloadButtonsListener() {
+  const downloadButtons = document.querySelectorAll(
+    ".dropzone__preview__el__download"
+  );
+
+  let status = true;
+  downloadButtons.forEach((btn) => {
+    if (btn.innerHTML.toLowerCase() !== localization.download) status = false;
+  });
+
+  if (status) convertAll.innerHTML = localization.download;
 }
 
 function addDropboxFileCloseButtonListener(id) {
@@ -683,6 +769,8 @@ function addDropboxFileCloseButtonListener(id) {
             inputFile.click();
           document.getElementById("modalDropboxBtn").onclick = () =>
             dropboxButton.click();
+          document.getElementById("modalLinkBtn").onclick = () =>
+            linkButton.click();
         });
       }
     }
@@ -694,3 +782,193 @@ function addDropboxFileCloseButtonListener(id) {
 }
 
 // dropbox
+
+// link modal
+
+const linkButton = document.getElementById("linkDownload");
+
+linkButton.onclick = () => {
+  closeModal(0);
+  setTimeout(() => {
+    const initElement = openModal(1);
+
+    let inputs = document.querySelectorAll(".linkDownloadInput");
+
+    document.getElementById("linkModalSubmit").onclick = async () => {
+      inputs.forEach(async (input, index) => {
+        const value = input.value;
+        const id = Date.now() + index;
+
+        const clientName = value.split("/")[value.split("/").length - 1];
+
+        const res = await fetch(
+          "https://monkfish-app-rsu9p.ondigitalocean.app/linkupload",
+          {
+            method: "POST",
+            body: JSON.stringify({ link: value }),
+          }
+        ).then((data) => data.json());
+
+        if (res) {
+          document.getElementById("dropzoneSection").classList.add("active");
+
+          document
+            .getElementById("dropzoneContentTextWrapper")
+            .classList.add("active");
+
+          setTimeout(() => {
+            document.getElementById("convertButtons").classList.add("put");
+          }, 10);
+
+          convertButtons.style.display = "flex";
+          document.getElementById("dropzone").classList.add("active");
+
+          const fileData = {
+            serverName: res.fileName,
+            clientName,
+            size: res.size,
+          };
+
+          const previewTemplate = `
+         <div class="dropzone__preview__el__wrapper" id="wrapper_${id}">
+        <div class="dropzone__preview__el template">
+            <div class="dropzone__preview__el__left">
+             <div class="dropzone__preview__el__img">
+              <img src="img/heic.png" alt="" />
+          </div>
+  
+              <div
+              class="dropzone__preview__el__text dz-filename"
+  
+          >${fileData.clientName}</div>
+            <div class="dropzone__preview__el__size">
+              <span>${Math.round(fileData.size / 1024)} KB</span>
+             </div>
+          </div>
+  
+          <div class="dropzone__preview__el__right">
+             <div class="dropzone__preview__converted-file-data">
+                 <div class="dropzone__preview__converted-file-data__format">.JPG</div>
+               <div class="dropzone__preview__converted-file-data__size"><span class="dropzonePreviewSize"></span> kb</div>
+             </div>
+             <a class="dropzone__preview__el__download loading dropbox" id="${id}">Loading</a>
+           </div>
+           <div class="dropzone__preview__el__close dropboxClose" id="close_${id}">
+             <svg
+               xmlns="http://www.w3.org/2000/svg"
+               x="0px"
+               y="0px"
+               width="100"
+               height="100"
+               viewBox="0 0 50 50"
+             >
+               <path
+                 d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"
+               ></path>
+             </svg>
+           </div>
+           </div>
+           <div class="dropzone__preview__add-button">${
+             localization.addMoreFiles
+           }</div>
+         </div>
+         `;
+
+          document.getElementById("dropzonePreviewEl").innerHTML +=
+            previewTemplate;
+          setCloseButtonsListeners();
+          addDropboxFileCloseButtonListener(id);
+          setDownloadButtonsListeners(
+            document.querySelectorAll(".dropzone__preview__el__download")
+          );
+
+          const addNewFileButtons = document.querySelectorAll(
+            ".dropzone__preview__add-button"
+          );
+
+          for (let i = 0; i < addNewFileButtons.length; i++) {
+            if (i != addNewFileButtons.length - 1)
+              addNewFileButtons[i].classList.remove("active");
+            else {
+              addNewFileButtons[i].classList.add("active");
+
+              addNewFileButtons[i].addEventListener("click", () => {
+                openModal(0);
+
+                document.getElementById("modalComputerBtn").onclick = () =>
+                  inputFile.click();
+                document.getElementById("modalDropboxBtn").onclick = () =>
+                  dropboxButton.click();
+                document.getElementById("modalLinkBtn").onclick = () =>
+                  linkButton.click();
+              });
+            }
+          }
+
+          setTimeout(async () => {
+            const btn = document.getElementById(id);
+
+            await fetch(
+              "https://monkfish-app-rsu9p.ondigitalocean.app/get/" +
+                fileData.serverName
+            )
+              .then((res) => {
+                if (res.status === 404) {
+                  btn.innerHTML = localization.error;
+                  btn.classList.remove("loading");
+                  document.getElementById(id).parentNode.classList.add("none");
+
+                  return false;
+                }
+                return res.blob();
+              })
+              .then((blob) => {
+                const parentNode = document.getElementById(id).parentNode;
+
+                parentNode.classList.add("active");
+
+                const url = window.URL.createObjectURL(blob);
+                btn.href = url;
+                btn.download = `${file.name.split(".")[0]}.jpg`;
+                btn.innerHTML = localization.download;
+                addDownloadButtonsListener();
+
+                return true;
+              });
+          }, 2000);
+        }
+      });
+
+      closeModal(1, initElement);
+    };
+    document.getElementById("linkModalCancel").onclick = () =>
+      closeModal(1, initElement);
+
+    document.getElementById("addMoreLinkModal").onclick = () => {
+      const element = `<input type="text" placeholder="http://" class="linkDownloadInput">`;
+
+      const inputsValues = getInputsValues();
+
+      document.getElementById("linkModalInputWrapper").innerHTML += element;
+      inputs = document.querySelectorAll(".linkDownloadInput");
+
+      for (let i = 0; i < inputs.length; i++) {
+        if (inputsValues[i]) inputs[i].value = inputsValues[i];
+      }
+    };
+
+    function getInputsValues() {
+      const values = [];
+
+      inputs.forEach((input) => values.push(input.value));
+
+      return values;
+    }
+  }, 310);
+};
+
+document.getElementById("modalLinkBtn").onclick = () => {
+  console.log("modalLinkBtn");
+};
+
+// link modal

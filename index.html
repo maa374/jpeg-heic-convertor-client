@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>HEIC to JPEG Converter</title>
 
     <link
       href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css"
@@ -18,156 +18,163 @@
   </head>
   <body>
     <header>
-      <div class="container">
-        <div class="header__top-block"></div>
-
-        <div class="header__lang-switcher__wrapper">
-          <div class="header__lang-switcher" id="langSwitcherWrapper">
-            <div class="header__lang-switcher__preview" id="langSwitcher">
-              <div class="header__lang-switcher__preview__img">
-                <img src="img/flags/en.png" alt="" />
+      <div class="container"> 
+        <div class="header__row">
+          <a href="#" class="header__logo">
+            <div class="header__logo__text">HEIC</div> 
+            <img src="/img/logo-arrow.svg" alt="">
+            <div class="header__logo__text">JPEG</div>
+          </a>
+  
+          <div class="header__lang-switcher__wrapper"  id="langSwitcherWrapper">
+            <div class="header__lang-switcher">
+              <div class="header__lang-switcher__preview" id="langSwitcher">
+                <div class="header__lang-switcher__preview__img">
+                  <img src="img/flags/en.png" alt="" />
+                </div>
+                <div class="header__lang-switcher__preview__title">English</div>
+                <div class="header__lang-switcher__preview__arrow">
+                  <img src="img/botArrow.png" alt="" />
+                </div>
               </div>
-              <div class="header__lang-switcher__preview__title">English</div>
-              <div class="header__lang-switcher__preview__arrow">
-                <img src="img/botArrow.png" alt="" />
-              </div>
-            </div>
-
-            <div class="header__lang-switcher__dropdown">
-              <div
-                class="header__lang-switcher__dropdown__content"
-                id="langSwitcherContent"
-              >
-                <a href="/en" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/en.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    English
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/es" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/es.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Español
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/fr" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/fr.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Français
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/de" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/de.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Deutsch
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/ru" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/ru.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Русский
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/pt" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/pt.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Português
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/cn" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/cn.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    简体中文
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/nl" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/nl.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Nederlands
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/pl" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/pl.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Polski
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/tr" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/tr.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Türkçe
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/id" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/id.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Indonesian
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/ja" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/ja.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    日本語
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/ko" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/ko.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    한국어
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
-                <a href="/vt" class="header__lang-switcher__preview">
-                  <div class="header__lang-switcher__preview__img">
-                    <img src="img/flags/vt.png" alt="" />
-                  </div>
-                  <div class="header__lang-switcher__preview__title">
-                    Tiếng Việt
-                  </div>
-                  <div class="header__lang-switcher__preview__arrow"></div>
-                </a>
+  
+              <div class="header__lang-switcher__dropdown">
+                <div
+                  class="header__lang-switcher__dropdown__content"
+                  id="langSwitcherContent"
+                >
+                  <a href="/en" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/en.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      English
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/es" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/es.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Español
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/fr" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/fr.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Français
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/de" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/de.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Deutsch
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/ru" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/ru.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Русский
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/pt" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/pt.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Português
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/cn" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/cn.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      简体中文
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/nl" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/nl.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Nederlands
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/pl" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/pl.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Polski
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/tr" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/tr.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Türkçe
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/id" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/id.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Indonesian
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/ja" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/ja.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      日本語
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/ko" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/ko.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      한국어
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                  <a href="/vt" class="header__lang-switcher__preview">
+                    <div class="header__lang-switcher__preview__img">
+                      <img src="img/flags/vt.png" alt="" />
+                    </div>
+                    <div class="header__lang-switcher__preview__title">
+                      Tiếng Việt
+                    </div>
+                    <div class="header__lang-switcher__preview__arrow"></div>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        
       </div>
     </header>
 
@@ -198,7 +205,7 @@
               >
 
               <div class="dropzone__content__text-block__links-row">
-                <div class="dropzone__content__text-block__links-row__el">
+                <div class="dropzone__content__text-block__links-row__el" id="dropboxDownload">
                   <div
                     class="dropzone__content__text-block__links-row__el__icon"
                   >
@@ -217,9 +224,40 @@
                   </div>
                   <div
                     class="dropzone__content__text-block__links-row__el__title"
-                    id="dropboxDownload"
+                    
                   >
                     Dropbox
+                  </div>
+                </div>
+
+                <div class="dropzone__content__text-block__links-row__el" id="linkDownload">
+                  <div
+                    class="dropzone__content__text-block__links-row__el__icon"
+                  >
+                    <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    
+    <g data-name="Layer 2">
+    
+    <g data-name="link-2">
+    
+    <rect width="24" height="24" opacity="0"/>
+    
+    <path d="M13.29 9.29l-4 4a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4-4a1 1 0 0 0-1.42-1.42z"/>
+    
+    <path d="M12.28 17.4L11 18.67a4.2 4.2 0 0 1-5.58.4 4 4 0 0 1-.27-5.93l1.42-1.43a1 1 0 0 0 0-1.42 1 1 0 0 0-1.42 0l-1.27 1.28a6.15 6.15 0 0 0-.67 8.07 6.06 6.06 0 0 0 9.07.6l1.42-1.42a1 1 0 0 0-1.42-1.42z"/>
+    
+    <path d="M19.66 3.22a6.18 6.18 0 0 0-8.13.68L10.45 5a1.09 1.09 0 0 0-.17 1.61 1 1 0 0 0 1.42 0L13 5.3a4.17 4.17 0 0 1 5.57-.4 4 4 0 0 1 .27 5.95l-1.42 1.43a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l1.42-1.42a6.06 6.06 0 0 0-.6-9.06z"/>
+    
+    </g>
+    
+    </g>
+    
+    </svg>
+                  </div>
+                  <div
+                    class="dropzone__content__text-block__links-row__el__title"
+                  >
+                    Link
                   </div>
                 </div>
               </div>
@@ -230,12 +268,26 @@
                 Drop files here
               </div>
 
-              <input id="inputFile" accept=".heic" type="file"  multiple="multiple"/>
+              <input id="inputFile" accept=".heic,.heif" type="file"  multiple="multiple"/>
+
+              
             </div>
+
+            <div class="dropzone__convert-content" id="convertButtons">
+              <div
+                class="dropzone__convert-content__convert dropzone__content__button"
+                id="convertAll"
+              >
+                Convert
+              </div>
+              <div class="dropzone__convert-content__cancel" id="convertCancel">
+                Cancel
+              </div>
+          </div>
           </div>
         </div>
 
-        <div class="dropzone__convert-content" id="convertButtons">
+        <!-- <div class="dropzone__convert-content" id="convertButtons">
           <div
             class="dropzone__convert-content__convert dropzone__content__button"
             id="convertAll"
@@ -245,7 +297,7 @@
           <div class="dropzone__convert-content__cancel" id="convertCancel">
             Cancel
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
 
@@ -499,8 +551,8 @@
           </div>
 
           <div class="modal__computer-button" id="modalComputerBtn">Computer</div>
-          <div class="modal__dropbox-button" id="modalDropboxBtn">
-            <div class="dropzone__content__text-block__links-row__el">
+          <div class="modal__dropbox-button" >
+            <div class="dropzone__content__text-block__links-row__el" id="modalDropboxBtn">
               <div
                 class="dropzone__content__text-block__links-row__el__icon"
               >
@@ -523,7 +575,76 @@
                 Dropbox
               </div>
             </div>
+
+            
           </div>
+          <div class="modal__link-button">
+            <div class="dropzone__content__text-block__links-row__el"  id="modalLinkBtn">
+              <div
+                class="dropzone__content__text-block__links-row__el__icon"
+              >
+                <svg fill="#000000" width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+<g data-name="Layer 2">
+
+<g data-name="link-2">
+
+<rect width="24" height="24" opacity="0"/>
+
+<path d="M13.29 9.29l-4 4a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4-4a1 1 0 0 0-1.42-1.42z"/>
+
+<path d="M12.28 17.4L11 18.67a4.2 4.2 0 0 1-5.58.4 4 4 0 0 1-.27-5.93l1.42-1.43a1 1 0 0 0 0-1.42 1 1 0 0 0-1.42 0l-1.27 1.28a6.15 6.15 0 0 0-.67 8.07 6.06 6.06 0 0 0 9.07.6l1.42-1.42a1 1 0 0 0-1.42-1.42z"/>
+
+<path d="M19.66 3.22a6.18 6.18 0 0 0-8.13.68L10.45 5a1.09 1.09 0 0 0-.17 1.61 1 1 0 0 0 1.42 0L13 5.3a4.17 4.17 0 0 1 5.57-.4 4 4 0 0 1 .27 5.95l-1.42 1.43a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l1.42-1.42a6.06 6.06 0 0 0-.6-9.06z"/>
+
+</g>
+
+</g>
+
+</svg>
+              </div>
+              <div
+                class="dropzone__content__text-block__links-row__el__title"
+              >
+                Link
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="modal">
+      <div class="modal__wrapper">
+        <div class="modal__content">
+          <div class="modal__close-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0px"
+              y="0px"
+              width="100"
+              height="100"
+              viewBox="0 0 50 50"
+            >
+              <path
+                d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"
+              ></path>
+            </svg>
+          </div>
+
+          <div id="linkModalInputWrapper">
+            <input type="text" placeholder="http://" class="linkDownloadInput">
+          </div>
+
+          <div class="addMoreLink__wrapper">
+            <div class="addMoreLink" id="addMoreLinkModal">ADD MORE</div>
+          </div>
+
+          <div class="linkDownloadModal__button-row">
+            <div class="linkDownloadModal__button-row-el" id="linkModalSubmit">Submit</div>
+            <div class="linkDownloadModal__button-row-el" id="linkModalCancel">Cancel</div>
           </div>
         </div>
       </div>
@@ -536,6 +657,7 @@
       data-app-key="1pabozlz77ytbrz"
     ></script>
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <script src="js/translates.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
