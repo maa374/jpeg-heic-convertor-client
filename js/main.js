@@ -1,8 +1,10 @@
 // translating
 
-const language = window.location.toString().split("/")[3].split(".")[0];
+const language = window.location.toString().split("/")[3].split("?")[1];
 
-const localization = translates[language];
+var localization = translates[language];
+
+if (!localization) localization = "en";
 
 // translating
 
