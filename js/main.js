@@ -20,14 +20,29 @@ langSwticher.addEventListener("mouseenter", () => {
 });
 
 langSwticher.addEventListener("mouseleave", (e) => {
-  if (
-    e.explicitOriginalTarget.classList[0] !==
-      "header__lang-switcher__preview" &&
-    e.explicitOriginalTarget !== langSwitcherWrapper
-  ) {
-    langSwticher.classList.remove("active");
-    langSwitcherContent.classList.remove("active");
+  if (e.toElement !== undefined) {
+    if (
+      e.toElement !== langSwitcherWrapper &&
+      e.toElement !== langSwitcherContent
+    ) {
+      langSwticher.classList.remove("active");
+      langSwitcherContent.classList.remove("active");
+    }
   }
+  if (e.explicitOriginalTarget !== undefined) {
+    if (
+      e.explicitOriginalTarget !== langSwitcherWrapper &&
+      e.explicitOriginalTarget !== langSwitcherContent
+    ) {
+      langSwticher.classList.remove("active");
+      langSwitcherContent.classList.remove("active");
+    }
+  }
+});
+
+langSwitcherWrapper.addEventListener("mouseleave", () => {
+  langSwticher.classList.remove("active");
+  langSwitcherContent.classList.remove("active");
 });
 
 langSwitcherContent.addEventListener("mouseleave", (e) => {
@@ -526,8 +541,12 @@ var modalClose = document.querySelectorAll(".modal__close-button");
 function openModal(index) {
   const initObj = modals[index].innerHTML;
 
-  document.body.style.overflow = "hidden";
+  setTimeout(() => {
+    document.body.style.position = "fixed";
+    document.body.style.width = window.innerWidth - 17 + "px";
+  }, 10);
   modals[index].classList.add("active");
+
   setTimeout(() => {
     modals[index].classList.add("visible");
   }, 10);
@@ -540,14 +559,19 @@ function openModal(index) {
   modals[index].onclick = () => closeModal(index, initObj);
   modalClose[index].onclick = () => closeModal(index, initObj);
 
+  isModalOpen = true;
+
   return initObj;
 }
-function closeModal(index, initModal) {
-  document.body.style.overflow = "auto";
 
+function closeModal(index, initModal) {
   if (initModal) modals[index].innerHTML = initModal;
 
   modals[index].classList.remove("visible");
+
+  document.body.style.position = "static";
+  document.body.style.width = window.innerWidth;
+
   setTimeout(() => {
     modals[index].classList.remove("active");
   }, 320);
@@ -922,6 +946,7 @@ linkButton.onclick = () => {
 
                   return false;
                 }
+
                 return res.blob();
               })
               .then((blob) => {
@@ -931,7 +956,7 @@ linkButton.onclick = () => {
 
                 const url = window.URL.createObjectURL(blob);
                 btn.href = url;
-                btn.download = `${file.name.split(".")[0]}.jpg`;
+                btn.download = fileData.clientName;
                 btn.innerHTML = localization.download;
                 addDownloadButtonsListener();
 
