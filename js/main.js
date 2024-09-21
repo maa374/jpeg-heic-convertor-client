@@ -570,7 +570,7 @@ function closeModal(index, initModal) {
   modals[index].classList.remove("visible");
 
   document.body.style.position = "static";
-  document.body.style.width = "100%";
+  document.body.style.width = window.innerWidth;
 
   setTimeout(() => {
     modals[index].classList.remove("active");
@@ -953,6 +953,9 @@ linkButton.onclick = () => {
                 const parentNode = document.getElementById(id).parentNode;
 
                 parentNode.classList.add("active");
+                parentNode.querySelectorAll(
+                  ".dropzonePreviewSize"
+                )[0].innerHTML = (blob.size / 1024).toFixed(1);
 
                 const url = window.URL.createObjectURL(blob);
                 btn.href = url;
