@@ -570,7 +570,7 @@ function closeModal(index, initModal) {
   modals[index].classList.remove("visible");
 
   document.body.style.position = "static";
-  document.body.style.width = window.innerWidth;
+  document.body.style.width = "100%";
 
   setTimeout(() => {
     modals[index].classList.remove("active");
