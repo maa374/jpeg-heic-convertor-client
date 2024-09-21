@@ -951,6 +951,7 @@ linkButton.onclick = () => {
               })
               .then((blob) => {
                 const parentNode = document.getElementById(id).parentNode;
+                btn.classList.remove("loading");
 
                 parentNode.classList.add("active");
                 parentNode.querySelectorAll(
