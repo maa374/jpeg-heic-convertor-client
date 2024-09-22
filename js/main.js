@@ -70,12 +70,16 @@ window.addEventListener("click", (e) => {
   }
 });
 
-window.addEventListener("touchstart", (e) => {
-  if (e.target !== footerLangSwticher) {
-    footerLangSwticher.classList.remove("active");
-    footerLangSwitcherContent.classList.remove("active");
-  }
-});
+// window.addEventListener("touchend", (e) => {
+//   if (
+//     e.target !== footerLangSwticher &&
+//     e.parentNode !== footerLangSwitcherContent
+//   ) {
+//     console.log(e.target.parentNode !== footerLangSwitcherContent);
+//     footerLangSwticher.classList.remove("active");
+//     footerLangSwitcherContent.classList.remove("active");
+//   }
+// });
 
 // language switcher
 
