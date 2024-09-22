@@ -50,6 +50,26 @@ langSwitcherContent.addEventListener("mouseleave", (e) => {
   langSwitcherContent.classList.remove("active");
 });
 
+const footerLangSwticher = document.getElementById("footerLangSwitcher");
+const footerLangSwitcherContent = document.getElementById(
+  "footerLangSwitcherContent"
+);
+const footerLangSwitcherWrapper = document.getElementById(
+  "footerLangSwitcherWrapper"
+);
+
+footerLangSwticher.addEventListener("click", () => {
+  footerLangSwticher.classList.toggle("active");
+  footerLangSwitcherContent.classList.toggle("active");
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target !== footerLangSwticher) {
+    footerLangSwticher.classList.remove("active");
+    footerLangSwitcherContent.classList.remove("active");
+  }
+});
+
 // language switcher
 
 // stars
@@ -543,7 +563,7 @@ function openModal(index) {
 
   setTimeout(() => {
     document.body.style.position = "fixed";
-    document.body.style.width = window.innerWidth - 17 + "px";
+    document.body.classList.add("noscroll");
   }, 10);
   modals[index].classList.add("active");
 
