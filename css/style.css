@@ -1016,7 +1016,8 @@ header {
 	border: 1px solid #d2d8e5;
 	padding: 5px 12px;
 }
-.linkDownloadInput::placeholder {
+.linkDownloadInput::placeholder,
+.linkDownloadInput {
   font-family: montserrat,sans-serif;
 }
 .addMoreLink {
