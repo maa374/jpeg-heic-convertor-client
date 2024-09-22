@@ -70,6 +70,13 @@ window.addEventListener("click", (e) => {
   }
 });
 
+window.addEventListener("touchstart", (e) => {
+  if (e.target !== footerLangSwticher) {
+    footerLangSwticher.classList.remove("active");
+    footerLangSwitcherContent.classList.remove("active");
+  }
+});
+
 // language switcher
 
 // stars
