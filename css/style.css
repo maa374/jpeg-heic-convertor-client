@@ -669,7 +669,8 @@ main {
 	position: relative;
 }
 .dropzone__convert-content {
-	height: 135px;
+	/* height: 135px; */
+	height: 162px;
 	background-color: #f9f7f2;
 	position: absolute;
 	width: 100%;
@@ -884,7 +885,7 @@ main {
 	display: none;
 	justify-content: space-between;
 	align-items: center;
-	width: 80px;
+	width: 92px;
 }
 .dropzone__preview__converted-file-data__format {
 	color: #d15d30;
@@ -1114,10 +1115,12 @@ header {
 	border: 1px solid #59636b;
 	color: #59636b;
 }
-#linkModalInputWrapper {
+#linkModalInputWrapper,
+#firstLinkModalInputWrapper {
 	width: 246px;
 	display: flex;
 	flex-direction: column;
+	margin: 0 auto;
 }
 .linkDownloadInput {
 	margin-top: 10px;
@@ -1151,4 +1154,31 @@ body.noscroll {
 #footerLangSwitcherWrapper  .header__lang-switcher__dropdown__content {
 	bottom: 44px;
 	top: auto;
+}
+
+#modal_1 #firstLinkModalInputWrapper, 
+#modal_1 .addMoreLink__wrapper,
+#modal_1 .linkDownloadModal__button-row {
+	display: none;
+}
+
+#dropzoneSaverWrapper {
+	height: 31px;
+	display: none;
+	align-items: center;
+	cursor: pointer;
+}
+#dropzoneSaverWrapper:hover svg {
+	fill:#2755b8;
+}
+#dropzoneSaverWrapper:hover .dropzone__content__text-block__links-row__el__title {
+	color: #353b48;
+}
+
+#dropzoneSaverWrapper {
+	margin-bottom: 15px;
+}
+
+#dropzoneSaverWrapper.active {
+	display: flex;
 }

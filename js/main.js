@@ -70,17 +70,6 @@ window.addEventListener("click", (e) => {
   }
 });
 
-// window.addEventListener("touchend", (e) => {
-//   if (
-//     e.target !== footerLangSwticher &&
-//     e.parentNode !== footerLangSwitcherContent
-//   ) {
-//     console.log(e.target.parentNode !== footerLangSwitcherContent);
-//     footerLangSwticher.classList.remove("active");
-//     footerLangSwitcherContent.classList.remove("active");
-//   }
-// });
-
 // language switcher
 
 // stars
@@ -290,6 +279,7 @@ dropzone.on("addedfile", (file) => {
 
   if (dropzone.files.length > 0) {
     convertAll.innerHTML = localization.convertAll;
+    dropboxButton.classList.remove("active");
   }
 
   for (let i = 0; i < addNewFileButtons.length; i++) {
@@ -306,7 +296,7 @@ dropzone.on("addedfile", (file) => {
         document.getElementById("modalDropboxBtn").onclick = () =>
           dropboxButton.click();
         document.getElementById("modalLinkBtn").onclick = () => {
-          linkButton.click();
+          modalLinkButtonListener();
         };
       });
     }
@@ -366,22 +356,42 @@ function setCloseButtonsListeners() {
     ".dropzone__preview__el__close"
   );
 
-  let dropboxStatus = false;
+  // let dropboxStatus = false;
   for (let i = 0; i < closeButtons.length; i++) {
     if (!closeButtons[i].classList.contains("dropboxClose")) {
       closeButtons[i].addEventListener("click", async (e) => {
         if (dropzone.files.length === 0)
           document.getElementById("convertCancel").click();
 
-        const addNewFileButtons = document.querySelectorAll(
-          ".dropzone__preview__add-button"
-        );
+        if (
+          closeButtons[i].parentElement.getElementsByClassName(
+            "dropzone__preview__el__download"
+          )[0].classList[1] !== "loading" &&
+          closeButtons[i].parentElement.getElementsByClassName(
+            "dropzone__preview__el__download"
+          )[0].classList[1]
+        ) {
+          const dbIndex = closeButtons[i].parentElement
+            .getElementsByClassName("dropzone__preview__el__download")[0]
+            .classList[1].split("_")[1];
+
+          deleteFileFromSaverOptions(dbIndex);
+        }
 
         removeFile(dt.files[i]);
 
-        if (dropboxStatus) {
-          closeButtons[i].offsetParent.remove();
-        }
+        closeButtons[i].parentElement.parentElement.remove();
+
+        if (document.getElementById("dropzonePreviewEl").children.length === 0)
+          document.getElementById("convertCancel").click();
+
+        // if (dropboxStatus) {
+        //   closeButtons[i].offsetParent.remove();
+        // }
+
+        const addNewFileButtons = document.querySelectorAll(
+          ".dropzone__preview__add-button"
+        );
 
         for (let i = 0; i < addNewFileButtons.length; i++) {
           if (i != addNewFileButtons.length - 1)
@@ -397,12 +407,12 @@ function setCloseButtonsListeners() {
               document.getElementById("modalDropboxBtn").onclick = () =>
                 dropboxButton.click();
               document.getElementById("modalLinkBtn").onclick = () =>
-                linkButton.click();
+                modalLinkButtonListener();
             });
           }
         }
       });
-    } else dropboxStatus = true;
+    } // else dropboxStatus = true;
   }
 }
 
@@ -417,7 +427,8 @@ function setDownloadButtonsListeners(buttons) {
       }
 
       if (!isInDownloadButtons) {
-        button.innerHTML = localization.loading;
+        button.innerHTML = localization.uploading;
+
         button.classList.add("loading");
         if (convertFile(dropzone.files[index], button)) {
           downloadButtons.push(button);
@@ -461,40 +472,72 @@ async function convertFile(file, DOMButton) {
 
       fileToDownloadHasBeen.push(file);
 
-      if (await serverName) {
-        setTimeout(async () => {
-          await fetch(
-            // "http://localhost:8080/get/" + serverName
-            "https://monkfish-app-rsu9p.ondigitalocean.app/get/" + serverName
-          )
-            .then((res) => {
-              if (res.status === 404) {
-                DOMButton.innerHTML = localization.error;
+      setTimeout(async () => {
+        if (await serverName) {
+          DOMButton.innerHTML = localization.converting;
+
+          setTimeout(async () => {
+            await fetch(
+              // "http://localhost:8080/get/" + serverName
+              "https://monkfish-app-rsu9p.ondigitalocean.app/get/" + serverName
+            )
+              .then((res) => {
+                if (res.status === 404) {
+                  DOMButton.innerHTML = localization.error;
+                  DOMButton.classList.remove("loading");
+                  DOMButton.parentNode.classList.add("none");
+
+                  return false;
+                }
+                return res.blob();
+              })
+              .then((blob) => {
+                const parentNode = DOMButton.parentNode;
+
+                parentNode.classList.add("active");
+                parentNode.querySelectorAll(
+                  ".dropzonePreviewSize"
+                )[0].innerHTML = (blob.size / 1024).toFixed(1);
+
+                const url = window.URL.createObjectURL(blob);
+                DOMButton.href = url;
+                DOMButton.download = `${file.name.split(".")[0]}.jpg`;
+                DOMButton.innerHTML = localization.download;
                 DOMButton.classList.remove("loading");
-                DOMButton.parentNode.classList.add("none");
+                addDownloadButtonsListener();
+                checkIsFilesReadyToDownload();
 
-                return false;
-              }
-              return res.blob();
-            })
-            .then((blob) => {
-              const parentNode = DOMButton.parentNode;
+                const dropboxSaverIndex = saverOptions.files.push({
+                  id: "",
+                  url:
+                    "https://monkfish-app-rsu9p.ondigitalocean.app/get/" +
+                    serverName,
+                  filename: `${file.name.split(".")[0]}.jpg`,
+                });
 
-              parentNode.classList.add("active");
-              parentNode.querySelectorAll(".dropzonePreviewSize")[0].innerHTML =
-                (blob.size / 1024).toFixed(1);
+                saverOptions.files[dropboxSaverIndex - 1].id =
+                  Date.now() + dropboxSaverIndex;
 
-              const url = window.URL.createObjectURL(blob);
-              DOMButton.href = url;
-              DOMButton.download = `${file.name.split(".")[0]}.jpg`;
-              DOMButton.innerHTML = localization.download;
-              DOMButton.classList.remove("loading");
-              addDownloadButtonsListener();
+                DOMButton.classList.add(
+                  "dbI_" + saverOptions.files[dropboxSaverIndex - 1].id
+                );
 
-              return true;
-            });
-        }, 2000);
-      }
+                if (
+                  convertAll.innerHTML.toLowerCase() ===
+                    localization.download.toLowerCase() ||
+                  convertAll.innerHTML.toLowerCase() ===
+                    localization.downloadAll.toLowerCase()
+                ) {
+                  document.getElementById("convertCancel").innerHTML =
+                    localization.startover;
+                  dropzoneSaverWrapper.classList.add("active");
+                }
+
+                return true;
+              });
+          }, 2000);
+        }
+      }, 300);
     }
 
     return false;
@@ -529,17 +572,22 @@ document.getElementById("convertCancel").onclick = () => {
   document.getElementById("dropzonePreviewEl").innerHTML = "";
 
   document.getElementById("convertButtons").classList.remove("put");
-
   setTimeout(() => {
     document
       .getElementById("dropzoneContentTextWrapper")
       .classList.remove("active");
 
     document.getElementById("convertButtons").style.display = "none";
+
+    document.getElementById("convertAll").innerHTML = localization.convert;
+    dropboxButton.classList.remove("active");
   }, 190);
 
   document.getElementById("dropzone").classList.remove("active");
   document.getElementById("dropzoneSection").classList.remove("active");
+
+  dropzoneSaverWrapper.classList.remove("active");
+  document.getElementById("convertCancel").innerHTML = localization.cancel;
 };
 
 const convertAll = document.getElementById("convertAll");
@@ -551,16 +599,45 @@ convertAll.onclick = () => {
   dropzone.files.forEach((file, index) => {
     if (
       downloadButtons[index].innerHTML.toLowerCase() !==
-        localization.download &&
-      downloadButtons[index].innerHTML.toLowerCase() !== localization.error
+        localization.download.toLowerCase() &&
+      downloadButtons[index].innerHTML.toLowerCase() !==
+        localization.error.toLowerCase()
     )
       downloadButtons[index].click();
   });
 
   downloadButtons.forEach((btn) => {
-    if (btn.innerHTML.toLowerCase() === localization.download) btn.click();
+    if (
+      btn.innerHTML.toLowerCase() === localization.download.toLowerCase() &&
+      (convertAll.innerHTML.toLowerCase() ===
+        localization.download.toLowerCase() ||
+        convertAll.innerHTML.toLowerCase() ===
+          localization.downloadAll.toLowerCase())
+    )
+      btn.click();
+
+    if (
+      (btn.innerHTML.toLowerCase() === localization.convertAll ||
+        btn.innerHTML.toLowerCase() === localization.convertToJPEG) &&
+      btn.innerHTML.toLowerCase() === localization.convertToJPEG
+    )
+      btn.click();
   });
 };
+
+function checkIsFilesReadyToDownload() {
+  const buttons = document.querySelectorAll(".dropzone__preview__el__download");
+
+  let status = true;
+  buttons.forEach((button) => {
+    if (button.innerHTML !== localization.download) status = false;
+  });
+
+  if (status) {
+    if (buttons.length > 1) convertAll.innerHTML = localization.downloadAll;
+    else convertAll.innerHTML = localization.download;
+  }
+}
 
 // dropzone
 
@@ -582,22 +659,26 @@ function openModal(index) {
     modals[index].classList.add("visible");
   }, 10);
 
+  console.log(modals[index].getElementsByClassName("modal__close-button")[0]);
+
+  modals[index].addEventListener("click", () => closeModal(index, initObj));
+  modals[index]
+    .getElementsByClassName("modal__close-button")[0]
+    .addEventListener("click", () => {
+      console.log("close click");
+      closeModal(index, initObj);
+      modals[index].click();
+    });
+
   modals[index].children[0].onclick = (e) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  modals[index].onclick = () => closeModal(index, initObj);
-  modalClose[index].onclick = () => closeModal(index, initObj);
-
-  isModalOpen = true;
-
   return initObj;
 }
 
 function closeModal(index, initModal) {
-  if (initModal) modals[index].innerHTML = initModal;
-
   modals[index].classList.remove("visible");
 
   document.body.style.position = "static";
@@ -605,6 +686,8 @@ function closeModal(index, initModal) {
 
   setTimeout(() => {
     modals[index].classList.remove("active");
+
+    if (initModal) modals[index].innerHTML = initModal;
   }, 320);
 
   modals = document.querySelectorAll(".modal");
@@ -661,7 +744,7 @@ options = {
         </div>
               
         <a class="dropzone__preview__el__download dropbox" id="${id}">${
-      localization.loading
+      localization.uploading
     }</a>
       </div>
                 
@@ -707,7 +790,7 @@ options = {
           document.getElementById("modalDropboxBtn").onclick = () =>
             dropboxButton.click();
           document.getElementById("modalLinkBtn").onclick = () =>
-            linkButton.click();
+            modalLinkButtonListener();
         });
       }
     }
@@ -752,40 +835,70 @@ async function uploadDropboxLink(file, id) {
 
     fileToDownloadHasBeen.push(file);
 
-    if (await serverName) {
-      setTimeout(async () => {
-        await fetch(
-          "https://monkfish-app-rsu9p.ondigitalocean.app/get/" + serverName
-          // "http://localhost:8080/get/" + serverName
-        )
-          .then((res) => {
-            if (res.status === 404) {
-              btn.innerHTML = localization.error;
-              btn.classList.remove("loading");
-              document.getElementById(id).parentNode.classList.add("none");
+    setTimeout(async () => {
+      if (await serverName) {
+        btn.innerHTML = localization.converting;
 
-              return false;
-            }
-            return res.blob();
-          })
-          .then((blob) => {
-            const parentNode = document.getElementById(id).parentNode;
+        setTimeout(async () => {
+          await fetch(
+            "https://monkfish-app-rsu9p.ondigitalocean.app/get/" + serverName
+            // "http://localhost:8080/get/" + serverName
+          )
+            .then((res) => {
+              if (res.status === 404) {
+                btn.innerHTML = localization.error;
+                btn.classList.remove("loading");
+                document.getElementById(id).parentNode.classList.add("none");
 
-            parentNode.classList.add("active");
-            parentNode.querySelectorAll(".dropzonePreviewSize")[0].innerHTML = (
-              blob.size / 1024
-            ).toFixed(1);
+                return false;
+              }
+              return res.blob();
+            })
+            .then((blob) => {
+              const parentNode = document.getElementById(id).parentNode;
 
-            const url = window.URL.createObjectURL(blob);
-            btn.href = url;
-            btn.download = `${file.name.split(".")[0]}.jpg`;
-            btn.innerHTML = localization.download;
-            addDownloadButtonsListener();
+              parentNode.classList.add("active");
+              parentNode.querySelectorAll(".dropzonePreviewSize")[0].innerHTML =
+                (blob.size / 1024).toFixed(1);
 
-            return true;
-          });
-      }, 2000);
-    }
+              const url = window.URL.createObjectURL(blob);
+              btn.href = url;
+              btn.download = `${file.name.split(".")[0]}.jpg`;
+              btn.innerHTML = localization.download;
+              addDownloadButtonsListener();
+              checkIsFilesReadyToDownload();
+
+              const dropboxSaverIndex = saverOptions.files.push({
+                id: "",
+                url:
+                  "https://monkfish-app-rsu9p.ondigitalocean.app/get/" +
+                  serverName,
+                filename: `${file.name.split(".")[0]}.jpg`,
+              });
+
+              saverOptions.files[dropboxSaverIndex - 1].id =
+                Date.now() + dropboxSaverIndex;
+
+              btn.classList.add(
+                "dbI_" + saverOptions.files[dropboxSaverIndex - 1].id
+              );
+
+              if (
+                convertAll.innerHTML.toLowerCase() ===
+                  localization.download.toLowerCase() ||
+                convertAll.innerHTML.toLowerCase() ===
+                  localization.downloadAll.toLowerCase()
+              ) {
+                document.getElementById("convertCancel").innerHTML =
+                  localization.startover;
+                dropzoneSaverWrapper.classList.add("active");
+              }
+
+              return true;
+            });
+        }, 2000);
+      }
+    }, 300);
   }
 }
 
@@ -807,7 +920,10 @@ function addDropboxFileCloseButtonListener(id) {
   const closeButton = document.getElementById("close_" + id);
 
   closeButton.addEventListener("click", () => {
+    console.log(DOMElement);
     DOMElement.remove();
+    // if (DOMElement.parentNode) DOMElement.parentNode.remove();
+    // if (DOMElement.parentElement) DOMElement.parentElement.remove();
 
     const addNewFileButtons = document.querySelectorAll(
       ".dropzone__preview__add-button"
@@ -827,7 +943,7 @@ function addDropboxFileCloseButtonListener(id) {
           document.getElementById("modalDropboxBtn").onclick = () =>
             dropboxButton.click();
           document.getElementById("modalLinkBtn").onclick = () =>
-            linkButton.click();
+            modalLinkButtonListener();
         });
       }
     }
@@ -849,7 +965,9 @@ linkButton.onclick = () => {
   setTimeout(() => {
     const initElement = openModal(1);
 
-    let inputs = document.querySelectorAll(".linkDownloadInput");
+    let inputs = document
+      .querySelectorAll(".modal")[1]
+      .querySelectorAll(".linkDownloadInput");
 
     document.getElementById("linkModalSubmit").onclick = async () => {
       inputs.forEach(async (input, index) => {
@@ -859,6 +977,7 @@ linkButton.onclick = () => {
         const clientName = value.split("/")[value.split("/").length - 1];
 
         const res = await fetch(
+          // "http://localhost:8080/linkupload",
           "https://monkfish-app-rsu9p.ondigitalocean.app/linkupload",
           {
             method: "POST",
@@ -908,7 +1027,9 @@ linkButton.onclick = () => {
                  <div class="dropzone__preview__converted-file-data__format">.JPG</div>
                <div class="dropzone__preview__converted-file-data__size"><span class="dropzonePreviewSize"></span> kb</div>
              </div>
-             <a class="dropzone__preview__el__download loading dropbox" id="${id}">Loading</a>
+             <a class="dropzone__preview__el__download loading dropbox" id="${id}">${
+            localization.uploading
+          }</a>
            </div>
            <div class="dropzone__preview__el__close dropboxClose" id="close_${id}">
              <svg
@@ -935,9 +1056,6 @@ linkButton.onclick = () => {
             previewTemplate;
           setCloseButtonsListeners();
           addDropboxFileCloseButtonListener(id);
-          setDownloadButtonsListeners(
-            document.querySelectorAll(".dropzone__preview__el__download")
-          );
 
           const addNewFileButtons = document.querySelectorAll(
             ".dropzone__preview__add-button"
@@ -957,7 +1075,7 @@ linkButton.onclick = () => {
                 document.getElementById("modalDropboxBtn").onclick = () =>
                   dropboxButton.click();
                 document.getElementById("modalLinkBtn").onclick = () =>
-                  linkButton.click();
+                  modalLinkButtonListener();
               });
             }
           }
@@ -966,6 +1084,7 @@ linkButton.onclick = () => {
             const btn = document.getElementById(id);
 
             await fetch(
+              // "http://localhost:8080/get/" + fileData.serverName
               "https://monkfish-app-rsu9p.ondigitalocean.app/get/" +
                 fileData.serverName
             )
@@ -991,9 +1110,38 @@ linkButton.onclick = () => {
 
                 const url = window.URL.createObjectURL(blob);
                 btn.href = url;
+
                 btn.download = fileData.clientName;
                 btn.innerHTML = localization.download;
+
+                const dropboxSaverIndex = saverOptions.files.push({
+                  id: "",
+                  url:
+                    "https://monkfish-app-rsu9p.ondigitalocean.app/get/" +
+                    serverName,
+                  filename: `${file.name.split(".")[0]}.jpg`,
+                });
+
+                saverOptions.files[dropboxSaverIndex - 1].id =
+                  Date.now() + dropboxSaverIndex;
+
+                btn.classList.add(
+                  "dbI_" + saverOptions.files[dropboxSaverIndex - 1].id
+                );
+
+                if (
+                  convertAll.innerHTML.toLowerCase() ===
+                    localization.download.toLowerCase() ||
+                  convertAll.innerHTML.toLowerCase() ===
+                    localization.downloadAll.toLowerCase()
+                ) {
+                  document.getElementById("convertCancel").innerHTML =
+                    localization.startover;
+                  dropzoneSaverWrapper.classList.add("active");
+                }
+
                 addDownloadButtonsListener();
+                checkIsFilesReadyToDownload();
 
                 return true;
               });
@@ -1012,7 +1160,9 @@ linkButton.onclick = () => {
       const inputsValues = getInputsValues();
 
       document.getElementById("linkModalInputWrapper").innerHTML += element;
-      inputs = document.querySelectorAll(".linkDownloadInput");
+      inputs = document
+        .querySelectorAll(".modal")[1]
+        .querySelectorAll(".linkDownloadInput");
 
       for (let i = 0; i < inputs.length; i++) {
         if (inputsValues[i]) inputs[i].value = inputsValues[i];
@@ -1029,8 +1179,254 @@ linkButton.onclick = () => {
   }, 310);
 };
 
-document.getElementById("modalLinkBtn").onclick = () => {
-  console.log("modalLinkBtn");
-};
+const modalLinkButton = document.getElementById("modalLinkBtn");
+
+function modalLinkButtonListener() {
+  document.getElementById("firstLinkModalInputWrapper").style.display = "flex";
+  document
+    .getElementById("modal_1")
+    .querySelectorAll(".addMoreLink__wrapper")[0].style.display = "flex";
+  document
+    .getElementById("modal_1")
+    .querySelectorAll(".linkDownloadModal__button-row")[0].style.display =
+    "flex";
+
+  document.getElementById("firstLinkModalSubmit").onclick = async () => {
+    document.getElementById("modal_1").click();
+
+    let modalInputs = document
+      .getElementById("modal_1")
+      .querySelectorAll(".linkDownloadInput");
+
+    modalInputs.forEach(async (input, index) => {
+      const value = input.value;
+      const id = Date.now() + index;
+
+      const clientName = value.split("/")[value.split("/").length - 1];
+
+      const res = await fetch(
+        // "http://localhost:8080/linkupload",
+        "https://monkfish-app-rsu9p.ondigitalocean.app/linkupload",
+        {
+          method: "POST",
+          body: JSON.stringify({ link: value }),
+        }
+      ).then((data) => data.json());
+
+      if (res) {
+        document.getElementById("dropzoneSection").classList.add("active");
+
+        document
+          .getElementById("dropzoneContentTextWrapper")
+          .classList.add("active");
+
+        setTimeout(() => {
+          document.getElementById("convertButtons").classList.add("put");
+        }, 10);
+
+        convertButtons.style.display = "flex";
+        document.getElementById("dropzone").classList.add("active");
+
+        const fileData = {
+          serverName: res.fileName,
+          clientName,
+          size: res.size,
+        };
+
+        const previewTemplate = `
+         <div class="dropzone__preview__el__wrapper" id="wrapper_${id}">
+        <div class="dropzone__preview__el template">
+            <div class="dropzone__preview__el__left">
+             <div class="dropzone__preview__el__img">
+              <img src="img/heic.png" alt="" />
+          </div>
+  
+              <div
+              class="dropzone__preview__el__text dz-filename"
+  
+          >${fileData.clientName}</div>
+            <div class="dropzone__preview__el__size">
+              <span>${Math.round(fileData.size / 1024)} KB</span>
+             </div>
+          </div>
+  
+          <div class="dropzone__preview__el__right">
+             <div class="dropzone__preview__converted-file-data">
+                 <div class="dropzone__preview__converted-file-data__format">.JPG</div>
+               <div class="dropzone__preview__converted-file-data__size"><span class="dropzonePreviewSize"></span> kb</div>
+             </div>
+             <a class="dropzone__preview__el__download loading dropbox" id="${id}">${
+          localization.uploading
+        }</a>
+           </div>
+           <div class="dropzone__preview__el__close dropboxClose" id="close_${id}">
+             <svg
+               xmlns="http://www.w3.org/2000/svg"
+               x="0px"
+               y="0px"
+               width="100"
+               height="100"
+               viewBox="0 0 50 50"
+             >
+               <path
+                 d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z"
+               ></path>
+             </svg>
+           </div>
+           </div>
+           <div class="dropzone__preview__add-button">${
+             localization.addMoreFiles
+           }</div>
+         </div>
+         `;
+
+        document.getElementById("dropzonePreviewEl").innerHTML +=
+          previewTemplate;
+        setCloseButtonsListeners();
+        addDropboxFileCloseButtonListener(id);
+
+        const addNewFileButtons = document.querySelectorAll(
+          ".dropzone__preview__add-button"
+        );
+
+        for (let i = 0; i < addNewFileButtons.length; i++) {
+          if (i != addNewFileButtons.length - 1)
+            addNewFileButtons[i].classList.remove("active");
+          else {
+            addNewFileButtons[i].classList.add("active");
+
+            addNewFileButtons[i].addEventListener("click", () => {
+              openModal(0);
+
+              document.getElementById("modalComputerBtn").onclick = () =>
+                inputFile.click();
+              document.getElementById("modalDropboxBtn").onclick = () =>
+                dropboxButton.click();
+              document.getElementById("modalLinkBtn").onclick = () =>
+                modalLinkButtonListener();
+            });
+          }
+        }
+
+        setTimeout(async () => {
+          const btn = document.getElementById(id);
+
+          await fetch(
+            // "http://localhost:8080/get/" + fileData.serverName
+            "https://monkfish-app-rsu9p.ondigitalocean.app/get/" +
+              fileData.serverName
+          )
+            .then((res) => {
+              if (res.status === 404) {
+                btn.innerHTML = localization.error;
+                btn.classList.remove("loading");
+                document.getElementById(id).parentNode.classList.add("none");
+
+                return false;
+              }
+
+              return res.blob();
+            })
+            .then((blob) => {
+              const parentNode = document.getElementById(id).parentNode;
+              btn.classList.remove("loading");
+
+              parentNode.classList.add("active");
+              parentNode.querySelectorAll(".dropzonePreviewSize")[0].innerHTML =
+                (blob.size / 1024).toFixed(1);
+
+              const url = window.URL.createObjectURL(blob);
+              btn.href = url;
+
+              btn.download = fileData.clientName;
+              btn.innerHTML = localization.download;
+
+              const dropboxSaverIndex = saverOptions.files.push({
+                id: "",
+                url:
+                  "https://monkfish-app-rsu9p.ondigitalocean.app/get/" +
+                  serverName,
+                filename: `${file.name.split(".")[0]}.jpg`,
+              });
+
+              saverOptions.files[dropboxSaverIndex - 1].id =
+                Date.now() + dropboxSaverIndex;
+
+              btn.classList.add(
+                "dbI_" + saverOptions.files[dropboxSaverIndex - 1].id
+              );
+
+              if (
+                convertAll.innerHTML.toLowerCase() ===
+                  localization.download.toLowerCase() ||
+                convertAll.innerHTML.toLowerCase() ===
+                  localization.downloadAll.toLowerCase()
+              ) {
+                document.getElementById("convertCancel").innerHTML =
+                  localization.startover;
+                dropzoneSaverWrapper.classList.add("active");
+              }
+
+              addDownloadButtonsListener();
+              checkIsFilesReadyToDownload();
+
+              return true;
+            });
+        }, 2000);
+      }
+    });
+
+    // closeModal(1, initElement);
+  };
+  document.getElementById("firstLinkModalCancel").onclick = () =>
+    document
+      .getElementById("modal_1")
+      .querySelectorAll(".modal__close-button")[0]
+      .click();
+
+  document.getElementById("firstAddMoreLinkModal").onclick = () => {
+    const element = `<input type="text" placeholder="http://" class="linkDownloadInput">`;
+
+    const inputsValues = getInputsValues();
+
+    document.getElementById("firstLinkModalInputWrapper").innerHTML += element;
+    modalInputs = document.querySelectorAll(".linkDownloadInput");
+
+    for (let i = 0; i < modalInputs.length; i++) {
+      if (inputsValues[i]) modalInputs[i].value = inputsValues[i];
+    }
+  };
+
+  function getInputsValues() {
+    const modalInputs = document
+      .getElementById("modal_1")
+      .querySelectorAll(".linkDownloadInput");
+
+    const values = [];
+
+    modalInputs.forEach((input) => values.push(input.value));
+
+    return values;
+  }
+}
 
 // link modal
+
+var saverOptions = {
+  files: [],
+};
+// var button = Dropbox.createSaveButton(saverOptions);
+
+const dropboxSaverButton = document.getElementById("dropzoneSaverWrapper");
+
+dropzoneSaverWrapper.onclick = () => {
+  Dropbox.save(saverOptions);
+};
+
+function deleteFileFromSaverOptions(id) {
+  saverOptions.files.forEach((file, index) => {
+    if (file.id.toString() === id) saverOptions.files.splice(index, 1);
+  });
+}
+
+// document.getElementById("container").appendChild(button);

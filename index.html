@@ -282,6 +282,29 @@
               >
                 Convert
               </div>
+              <div id="dropzoneSaverWrapper" class="dropzone__dropbox-button__wrapper">
+                <div
+                class="dropzone__content__text-block__links-row__el__icon"
+              >
+                <svg
+                  id="Layer_1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 42.4 39.5"
+                  width="2500"
+                  height="2329"
+                >
+                  <path
+                    class="st0"
+                    d="M10.6 1.7L0 8.5l10.6 6.7 10.6-6.7zm21.2 0L21.2 8.5l10.6 6.7 10.6-6.7zM0 22l10.6 6.8L21.2 22l-10.6-6.8zm31.8-6.8L21.2 22l10.6 6.8L42.4 22zM10.6 31l10.6 6.8L31.8 31l-10.6-6.7z"
+                  />
+                </svg>
+              </div>
+              <div
+                class="dropzone__content__text-block__links-row__el__title"
+              >
+                Dropbox
+              </div>
+              </div>
               <div class="dropzone__convert-content__cancel" id="convertCancel">
                 Cancel
               </div>
@@ -289,17 +312,7 @@
           </div>
         </div>
 
-        <!-- <div class="dropzone__convert-content" id="convertButtons">
-          <div
-            class="dropzone__convert-content__convert dropzone__content__button"
-            id="convertAll"
-          >
-            Convert
-          </div>
-          <div class="dropzone__convert-content__cancel" id="convertCancel">
-            Cancel
-          </div>
-        </div> -->
+        
       </div>
     </section>
 
@@ -682,7 +695,7 @@
       </div>
     </footer>
 
-    <div class="modal">
+    <div class="modal" id="modal_1">
       <div class="modal__wrapper">
         <div class="modal__content">
           <div class="modal__close-button">
@@ -760,6 +773,20 @@
               </div>
             </div>
           </div>
+
+          <div id="firstLinkModalInputWrapper">
+            <input type="text" placeholder="http://" class="linkDownloadInput">
+          </div>
+
+          <div class="addMoreLink__wrapper">
+            <div class="addMoreLink" id="firstAddMoreLinkModal">ADD MORE</div>
+          </div>
+
+          <div class="linkDownloadModal__button-row">
+            <div class="linkDownloadModal__button-row-el" id="firstLinkModalSubmit">Submit</div>
+            <div class="linkDownloadModal__button-row-el" id="firstLinkModalCancel">Cancel</div>
+          </div>
+        </div>
           </div>
         </div>
       </div>
@@ -799,6 +826,10 @@
         </div>
       </div>
     </div>
+
+    <div id="container"></div>
+
+
 
     <script
       type="text/javascript"
